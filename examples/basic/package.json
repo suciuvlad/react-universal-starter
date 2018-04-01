@@ -1,0 +1,15 @@
+{
+  "name": "basic",
+  "scripts": {
+    "dev": "reactuniversalstarter"
+  },
+  "dependencies": {
+    "react-universal-starter": "9.9.9"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "stats-webpack-plugin": "^0.6.2"
+  }
+}

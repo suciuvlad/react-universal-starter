@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+
+const express = require('express');
+const webpack = require('webpack');
+const compression = require('compression');
+const devServer = require('webpack-dev-server');
+const morgan = require('morgan');
+const noFavicon = require('express-no-favicons');
+
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackHotServerMiddleware = require('webpack-hot-server-middleware');
+
+const clientConfig = require('../webpack/client.dev.js');
+const serverConfig = require('../webpack/server.dev.js');
+
+const publicPath = clientConfig.output.publicPath;
+
+const DEV = process.env.NODE_ENV === 'development';
+const PORT = process.env.PORT || 3000;
+
+// const app = express();
+
+// app.use(noFavicon());
+
+// let isBuilt = false;
+
+// const listenAndServe = () =>
+//   !isBuilt &&
+//   app.listen(PORT, () => {
+//     isBuilt = true;
+//     // eslint-disable-next-line
+//     console.log(`🚀 Ready on http://localhost:${ PORT }`);
+//   });
+
+// if (DEV) {
+  const compiler = webpack([clientConfig, serverConfig]);
+  const clientCompiler = compiler.compilers[0];
+  const serverCompiler = compiler.compilers[1];
+  const options = { publicPath, stats: { colors: true } };
+
+  compiler.watch({
+      quiet: false, stats: 'none'
+    },
+    stats => {}
+  );
+
+  // app.use(compression());
+  // app.use(morgan(':remote-addr - :remote-user [:date[clf]] :method :url HTTP/:http-version :status :response-time ms - :res[content-length] :referrer :user-agent'));
+  // app.use(webpackDevMiddleware(compiler, options));
+  // app.use(webpackHotMiddleware(clientCompiler));
+  // app.use(webpackHotServerMiddleware(compiler));
+
+  // compiler.plugin('done', listenAndServe);
+// eslint-disable-next-line
+// } else {
+  // webpack([clientConfigProd, serverConfigProd]).run((err, stats) => {
+  //   const clientStats = stats.toJson().children[0];
+  //   // eslint-disable-next-line
+  //   const serverRender = require('../.build/server/main.js').default;
+
+  //   app.disable('x-powered-by')
+  //   app.use(publicPath, express.static(outputPath));
+  //   app.set('trust proxy', true);
+  //   app.use(helmet({ dnsPrefetchControl: false }));
+  //   app.use(compression());
+  //   app.use('/precache-worker.js', express.static(path.resolve(__dirname, '../.build/client/precache-worker.js')));
+  //   app.use('/manifest.json', express.static(path.resolve(__dirname, '../manifest.json')));
+  //   app.use(morgan(':remote-addr - :remote-user [:date[clf]] :method :url HTTP/:http-version :status :response-time ms - :res[content-length] :referrer :user-agent'));
+  //   app.use(serverRender({ clientStats }));
+
+  //   listenAndServe();
+  // });
+// }
